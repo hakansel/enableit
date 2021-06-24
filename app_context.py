@@ -2,23 +2,21 @@ from services import MinioClientService, RedisClientService
 
 
 class AppContext(object):
+    __minio_client_service = None
+    __redis_client_service = None
 
-    def __init__(self):
-        self.__minio_client = None
-        self.__redis_client = None
+    @classmethod
+    def get_minio_client_service(cls) -> MinioClientService:
+        return cls.__minio_client_service
 
-    @property
-    def minio_client(self) -> MinioClientService:
-        return self.__minio_client
+    @classmethod
+    def set_minio_client_service(cls, value: MinioClientService):
+        cls.__minio_client_service = value
 
-    @property
-    def redis_client(self) -> RedisClientService:
-        return self.__redis_client
+    @classmethod
+    def get_redis_client_service(cls) -> RedisClientService:
+        return cls.__redis_client_service
 
-    @minio_client.setter
-    def minio_client(self, value: MinioClientService):
-        self.__minio_client = value
-
-    @redis_client.setter
-    def redis_client(self, value: RedisClientService):
-        self.__redis_client = value
+    @classmethod
+    def set_redis_client_service(cls, value: RedisClientService):
+        cls.__redis_client_service = value
