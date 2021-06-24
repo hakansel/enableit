@@ -6,9 +6,9 @@ def enable_minio(func):
 
     @functools.wraps(func)
     def wrapper_enable_minio(*args, **kwargs):
-        from services import MinioServiceClient
+        from services import MinioClientService
         from app_context import AppContext
-        AppContext.minio_client = MinioServiceClient()
+        AppContext.minio_client = MinioClientService()
         return func(*args, **kwargs)
 
     return wrapper_enable_minio
@@ -19,9 +19,9 @@ def enable_redis(func):
 
     @functools.wraps(func)
     def wrapper_enable_minio(*args, **kwargs):
-        from services import RedisServiceClient
+        from services import RedisClientService
         from app_context import AppContext
-        AppContext.redis_client = RedisServiceClient()
+        AppContext.redis_client = RedisClientService()
         return func(*args, **kwargs)
 
     return wrapper_enable_minio

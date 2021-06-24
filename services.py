@@ -1,7 +1,7 @@
 import abc
 
 
-class BaseServiceClient(abc.ABC):
+class BaseClientService(abc.ABC):
 
     def __new__(cls, *args, **kwargs):
         if not hasattr(cls, 'instance') or not cls.instance:
@@ -20,7 +20,7 @@ class BaseServiceClient(abc.ABC):
         pass
 
 
-class MinioServiceClient(BaseServiceClient):
+class MinioClientService(BaseClientService):
 
     def get_client(self):
         print('You got it Minio client..')
@@ -31,7 +31,7 @@ class MinioServiceClient(BaseServiceClient):
         pass
 
 
-class RedisServiceClient(BaseServiceClient):
+class RedisClientService(BaseClientService):
 
     def get_client(self):
         print('You got it Redis client..')
