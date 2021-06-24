@@ -1,18 +1,35 @@
 import abc
+from typing import Optional, Generic, TypeVar
+
+from minio import Minio
+from redis import Redis
+
+T = TypeVar("T")
 
 
-class BaseClientService(abc.ABC):
+class BaseClientService(abc.ABC, Generic[T]):
+    """
+        T is the concrete client
+    """
+
+    _client: T = None
 
     def __new__(cls, *args, **kwargs):
         if not hasattr(cls, 'instance') or not cls.instance:
-            cls.instance = super().__new__(cls)
-            cls.instance._init_client()
+            try:
+                cls.instance = super().__new__(cls)
+                print("Initialization is starting: {}".format(type(cls.instance).__name__))
+                cls.instance._init_client()
+                print("Initialization is completed: {}".format(type(cls.instance).__name__))
+            except Exception as e:
+                print("Initialization failed: {} caused by: {}".format(type(cls.instance).__name__, e))
+                cls.instance = None
         return cls.instance
 
     @abc.abstractmethod
-    def get_client(self):
+    def get_client(self) -> Optional[T]:
         """return connection of concrete service"""
-        pass
+        return self._client
 
     @abc.abstractmethod
     def _init_client(self):
@@ -20,23 +37,21 @@ class BaseClientService(abc.ABC):
         pass
 
 
-class MinioClientService(BaseClientService):
+class MinioClientService(BaseClientService[Minio]):
+    _client: Minio = None
 
-    def get_client(self):
-        print('You got it Minio client..')
-        pass
-
-    def _init_client(self):
-        print('Minio Client initialized...')
-        pass
-
-
-class RedisClientService(BaseClientService):
-
-    def get_client(self):
-        print('You got it Redis client..')
-        pass
+    def get_client(self) -> Optional[Minio]:
+        return self._client
 
     def _init_client(self):
-        print('Redis Client initialized...')
+        pass
+
+
+class RedisClientService(BaseClientService[Redis]):
+    _client: Redis = None
+
+    def get_client(self) -> Optional[Redis]:
+        return self._client
+
+    def _init_client(self):
         pass
