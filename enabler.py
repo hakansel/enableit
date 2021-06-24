@@ -11,7 +11,7 @@ def enable_minio(func):
         AppContext.minio_client = MinioServiceClient()
         return func(*args, **kwargs)
 
-    return wrapper_enable_minio(func)
+    return wrapper_enable_minio
 
 
 def enable_redis(func):
@@ -24,4 +24,4 @@ def enable_redis(func):
         AppContext.redis_client = RedisServiceClient()
         return func(*args, **kwargs)
 
-    return wrapper_enable_minio(func)
+    return wrapper_enable_minio
